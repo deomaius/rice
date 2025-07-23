@@ -6,6 +6,10 @@ return {
     "MunifTanjim/nui.nvim",
   },
   config = function()
+    -- Set split behavior before noice setup
+    vim.opt.splitright = true
+    vim.opt.splitbelow = true
+
     require("noice").setup({
       cmdline = {
         view = "cmdline",
@@ -26,6 +30,28 @@ return {
         inc_rename = false, -- enables an input dialog for inc-rename.nvim
         lsp_doc_border = false, -- add a border to hover docs and signature help
         cmdline_output_to_split = true,
+      },
+      -- Configure routes to respect split settings
+      routes = {
+        {
+          filter = {
+            event = "msg_show",
+            any = {
+              { find = "%d+L, %d+B" },
+              { find = "; after #%d+" },
+              { find = "; before #%d+" },
+            },
+          },
+          opts = { skip = true },
+        },
+      },
+      views = {
+        split = {
+          win_options = {
+            winfixheight = true,
+            winfixwidth = false,
+          },
+        },
       },
     })
   end,
